@@ -101,6 +101,15 @@ You built your own server today. Connect Goose to it — no `client.py`, no code
 
 **Install:** download from `block.github.io/goose`
 
+**Step 1 — Set the model to qwen3:8b**
+
+Goose's default model is too small for tool calling. Switch it to your local Ollama:
+1. Open Goose → **Settings → Models**
+2. Add provider: **Ollama**, base URL `http://localhost:11434`
+3. Select model: `qwen3:8b`
+
+**Step 2 — Add the MCP extension**
+
 **Config** — edit `C:\Users\<your-name>\.config\goose\config.yaml`:
 ```yaml
 extensions:
@@ -115,7 +124,10 @@ extensions:
 ```
 Replace the path with the actual path to the server you built today.
 
-**Or via the Goose UI:** Settings → Extensions → Add → set type to `stdio`, cmd to `python`, args to the full path of your server.
+**Or via Goose UI:** Settings → Extensions → Add custom extension:
+- Extension Name: `MyServer` *(or whatever you named it)*
+- Type: `STDIO`
+- Command: `python C:\full\path\to\your_server.py` *(python and path in one field)*
 
 **Test it:** Ask Goose questions that need your tools. Watch it decide which one to call.
 
