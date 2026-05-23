@@ -16,7 +16,7 @@ Usage:
 Requires:
     - Ollama running: ollama serve
     - Model pulled: ollama pull qwen3:8b
-    - Day 1 server running: python "../Day 1 - Build a Server/server.py"
+    - Day 1 server running: python server.py
 """
 
 import asyncio
