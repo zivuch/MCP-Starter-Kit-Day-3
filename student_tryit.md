@@ -103,10 +103,11 @@ You built your own server today. Connect Goose to it — no `client.py`, no code
 
 **Step 1 — Set the model to qwen3:8b**
 
-Goose's default model is too small for tool calling. Switch it to your local Ollama:
-1. Open Goose → **Settings → Models**
-2. Add provider: **Ollama**, base URL `http://localhost:11434`
-3. Select model: `qwen3:8b`
+Goose's default model is too small for tool calling. Connect it to your local Ollama:
+1. Open Goose → click **Connect to a Provider**
+2. Find **Ollama** → click **Configure**
+3. **Ollama Host:** `localhost` — leave as-is → click **Submit**
+4. Select model: `qwen3:8b`
 
 **Step 2 — Add the MCP extension**
 
