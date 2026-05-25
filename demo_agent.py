@@ -2,8 +2,9 @@
 demo_agent.py — Day 3: Build an agent, step by step
 
 Stage 1 (this file):  LLM only — no tools
-Stage 2 (add below):  connect server.py → get_weather + read_file
-Stage 3 (add below):  add Wikipedia @tool → full agent
+Stage 2 (uncomment):  connect server.py → get_weather + read_file
+Stage 3 (uncomment):  add Wikipedia @tool → full agent
+Stage 4 (your task):  add a web search @tool
 
 Run:
     Terminal 1:  python server.py
@@ -27,7 +28,7 @@ model = LiteLLMModel(
     structured_output=False,
 )
 
-# ── Stage 2: add server tools ──────────────────────────────────────────────────
+# ── Stage 2: connect to server.py (must be running in Terminal 1) ─────────────
 # import atexit
 # from smolagents import MCPClient
 #
@@ -54,10 +55,44 @@ model = LiteLLMModel(
 #     except Exception as e:
 #         return f"Error: {e}"
 
+# ── Stage 4 — your task: add a web search tool ────────────────────────────────
+# Goal: write a @tool that searches the web, then add it to the tools list below.
+#
+# Option A — DuckDuckGo (no API key needed):
+#   pip install duckduckgo-search
+#
+#   @tool
+#   def web_search(query: str) -> str:
+#       """Search the web for current or recent information on any topic.
+#       Use this when you need up-to-date news or facts.
+#       Args:
+#           query: The search query, e.g. 'latest AI news 2025'.
+#       """
+#       from duckduckgo_search import DDGS
+#       with DDGS() as ddgs:
+#           results = list(ddgs.text(query, max_results=3))
+#           return "\n\n".join(f"{r['title']}: {r['body']}" for r in results)
+#
+# Option B — Tavily (free API key at tavily.com):
+#   pip install tavily-python
+#
+#   @tool
+#   def web_search(query: str) -> str:
+#       """Search the web for current or recent information on any topic.
+#       Use this when you need up-to-date news or facts.
+#       Args:
+#           query: The search query, e.g. 'latest AI news 2025'.
+#       """
+#       from tavily import TavilyClient
+#       client = TavilyClient(api_key="tvly-YOUR-API-KEY-HERE")
+#       results = client.search(query)["results"]
+#       return "\n\n".join(f"{r['title']}: {r['content']}" for r in results[:3])
+
 # ── tools list — update as you add stages ─────────────────────────────────────
 tools = []
 # Stage 2: tools = server_tools
 # Stage 3: tools = [*server_tools, wikipedia_summary]
+# Stage 4: tools = [*server_tools, wikipedia_summary, web_search]
 
 agent = ToolCallingAgent(tools=tools, model=model)
 
