@@ -26,9 +26,9 @@ pip install -r requirements.txt
 | `scaffold.py` | **Starting point** — rename, delete the example tool, add your own |
 | `server.py` | Day 1 server with `get_weather` and `read_file` — used for Tasks A/B/C in `student_tryit.md` |
 | `client.py` | Day 2 LLM loop client — use this to test your server |
+| `demo_agent.py` | Instructor demo — progressive agent: LLM only → MCP tools → Wikipedia → web search |
 | `ideas.md` | 10 server ideas with working code, all using free APIs |
 | `notes.txt` | Sample file the server can read |
-| `demo_smolagents.py` | Instructor demo — smolagents automating the TAO loop |
 | `student_tryit.md` | Exercise sheet |
 
 ## Build your server
@@ -58,13 +58,17 @@ python client.py "Ask it something that needs a tool"
 - Use free APIs — no sign-ups, no keys. See `ideas.md` for options.
 - If the LLM isn't calling your tool, improve the docstring.
 
-## Run the smolagents demo
+## Run the agent demo
 
 ```bash
-python demo_smolagents.py
+# Terminal 1 — MCP server (needed for Stage 2+):
+python server.py
+
+# Terminal 2 — agent chat:
+python demo_agent.py
 ```
 
-Shows the same 4-step loop from Day 2, automated by a framework in 5 lines. Requires Ollama + `qwen3:8b`.
+Starts as LLM-only chat. Add code stage by stage to connect MCP tools, Wikipedia, and web search. Requires Ollama + `qwen3:8b`.
 
 ## What's next
 
