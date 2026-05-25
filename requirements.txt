@@ -2,4 +2,4 @@ mcp[cli]
 openai
 requests
 rich
-smolagents[litellm]
+smolagents[litellm,mcp]

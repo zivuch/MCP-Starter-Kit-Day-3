@@ -24,6 +24,7 @@ model = LiteLLMModel(
     model_id="ollama/qwen3:8b",
     api_base="http://localhost:11434",
     num_ctx=8192,
+    structured_output=False,
 )
 
 # ── Stage 2: add server tools ──────────────────────────────────────────────────
