@@ -7,9 +7,9 @@
 
 ## Setup
 
-Make sure your Day 1 server is running:
+Make sure the server is running (in a separate terminal):
 ```
-python "../Day1-Build-a-Server/server.py"
+python server.py
 ```
 
 ---

@@ -16,7 +16,7 @@ Usage:
 Requires:
     - Ollama running: ollama serve
     - Model pulled: ollama pull qwen3:8b
-    - Day 1 server running: python "../Day 1 - Build a Server/server.py"
+    - Day 1 server running: python server.py
 """
 
 import asyncio
@@ -39,8 +39,11 @@ MCP_SERVER_URL = "http://127.0.0.1:8000/mcp/"
 OLLAMA_BASE    = "http://localhost:11434/v1"
 MODEL          = "qwen3:8b"
 
+<<<<<<< HEAD
 # Ollama exposes an OpenAI-compatible API — no OpenAI account needed; 
 # api_key is required by the SDK but ignored by Ollama
+=======
+>>>>>>> 3cb3b220ada1b2f532d6547081646bb2a0ec846d
 llm = OpenAI(base_url=OLLAMA_BASE, api_key="ollama")
 
 
@@ -149,6 +152,7 @@ async def run(prompt: str):
                 border_style="bright_green"
             ))
 
+<<<<<<< HEAD
             # ── Bonus: chain Resource + Prompt → LLM summary ─────────────────
             # Step A: read the resource (the data)
             resource = await session.read_resource("notes://today")
@@ -174,6 +178,8 @@ async def run(prompt: str):
                 border_style="bright_magenta"
             ))
 
+=======
+>>>>>>> 3cb3b220ada1b2f532d6547081646bb2a0ec846d
 
 if __name__ == "__main__":
     prompt = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else "What is the current weather in Tel Aviv?"

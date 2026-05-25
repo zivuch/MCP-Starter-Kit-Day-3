@@ -24,30 +24,39 @@ pip install -r requirements.txt
 | File | What it is |
 |------|------------|
 | `scaffold.py` | **Starting point** — rename, delete the example tool, add your own |
-| `ideas.md` | 10 server ideas with working code, all using free APIs |
-| `demo_smolagents.py` | Instructor demo — smolagents running the same TAO loop automatically |
+| `server.py` | Day 1 server with `get_weather` and `read_file` — used for Tasks A/B/C in `student_tryit.md` |
 | `client.py` | Day 2 LLM loop client — use this to test your server |
-| `notes.txt` | Sample file used by `demo_smolagents.py` |
+| `ideas.md` | 10 server ideas with working code, all using free APIs |
+| `notes.txt` | Sample file the server can read |
+| `demo_smolagents.py` | Instructor demo — smolagents automating the TAO loop |
 | `student_tryit.md` | Exercise sheet |
 
 ## Build your server
 
-1. Open `scaffold.py`
-2. Rename the server (`"MyServer"` → something meaningful)
-3. Delete the example tool, add 2–3 tools for your domain
-4. Run it:
-
+**Terminal 1 — run your server:**
 ```bash
 python scaffold.py
 ```
 
-5. In a second terminal, test it with `client.py`:
-
+**Terminal 2 — test it with the LLM:**
 ```bash
 python client.py "Ask it something that needs a tool"
 ```
 
+1. Open `scaffold.py`
+2. Rename `MyServer` to something meaningful
+3. Delete the example tool
+4. Add 2–3 tools for your domain (see `ideas.md` for inspiration)
+5. Write the docstring before the function body — it's what the LLM reads to decide when to call the tool
+6. Restart the server after every change
+
 **Stuck?** Open `ideas.md` — 10 fully-coded server ideas, no API keys needed.
+
+## Tips
+
+- Start with 1 tool. Get it working before adding the next.
+- Use free APIs — no sign-ups, no keys. See `ideas.md` for options.
+- If the LLM isn't calling your tool, improve the docstring.
 
 ## Run the smolagents demo
 
@@ -55,9 +64,7 @@ python client.py "Ask it something that needs a tool"
 python demo_smolagents.py
 ```
 
-Shows the same 4-step loop you built in Day 2, automated by a framework in 5 lines.
-
-Requires Ollama + `qwen3:8b`.
+Shows the same 4-step loop from Day 2, automated by a framework in 5 lines. Requires Ollama + `qwen3:8b`.
 
 ## What's next
 
