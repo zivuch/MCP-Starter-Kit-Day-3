@@ -31,29 +31,11 @@ model = LiteLLMModel(
 # ── Stage 2: connect to server.py (must be running in Terminal 1) ─────────────
 # import atexit
 # from smolagents import MCPClient
-#
-# _mcp = MCPClient({"url": "http://127.0.0.1:8000/mcp/"})
-# server_tools = [*_mcp.__enter__()]
-# atexit.register(lambda: _mcp.__exit__(None, None, None))
+
 
 # ── Stage 3: add Wikipedia ─────────────────────────────────────────────────────
 # from smolagents import tool
-#
-# @tool
-# def wikipedia_summary(topic: str) -> str:
-#     """Get a short summary of any topic from Wikipedia.
-#     Use this for facts, history, definitions, or general knowledge.
-#     Args:
-#         topic: The topic to look up, e.g. 'France', 'Tel Aviv'.
-#     """
-#     import json, urllib.parse, urllib.request
-#     query = urllib.parse.quote(topic)
-#     url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{query}"
-#     try:
-#         with urllib.request.urlopen(url, timeout=5) as resp:
-#             return json.loads(resp.read()).get("extract", "No summary found.")
-#     except Exception as e:
-#         return f"Error: {e}"
+
 
 # ── Stage 4 — your task: add a web search tool ────────────────────────────────
 # Goal: write a @tool that searches the web, then add it to the tools list below.
@@ -62,37 +44,14 @@ model = LiteLLMModel(
 #   pip install duckduckgo-search
 #
 #   @tool
-#   def web_search(query: str) -> str:
-#       """Search the web for current or recent information on any topic.
-#       Use this when you need up-to-date news or facts.
-#       Args:
-#           query: The search query, e.g. 'latest AI news 2025'.
-#       """
-#       from duckduckgo_search import DDGS
-#       with DDGS() as ddgs:
-#           results = list(ddgs.text(query, max_results=3))
-#           return "\n\n".join(f"{r['title']}: {r['body']}" for r in results)
 #
 # Option B — Tavily (free API key at tavily.com):
 #   pip install tavily-python
 #
 #   @tool
-#   def web_search(query: str) -> str:
-#       """Search the web for current or recent information on any topic.
-#       Use this when you need up-to-date news or facts.
-#       Args:
-#           query: The search query, e.g. 'latest AI news 2025'.
-#       """
-#       from tavily import TavilyClient
-#       client = TavilyClient(api_key="tvly-YOUR-API-KEY-HERE")
-#       results = client.search(query)["results"]
-#       return "\n\n".join(f"{r['title']}: {r['content']}" for r in results[:3])
 
 # ── tools list — update as you add stages ─────────────────────────────────────
 tools = []
-# Stage 2: tools = server_tools
-# Stage 3: tools = [*server_tools, wikipedia_summary]
-# Stage 4: tools = [*server_tools, wikipedia_summary, web_search]
 
 agent = ToolCallingAgent(tools=tools, model=model)
 
