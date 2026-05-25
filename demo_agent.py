@@ -1,13 +1,14 @@
 """
-demo_agent.py — Day 3: An interactive agent
+demo_agent.py — Day 3: Build an agent, step by step
 
-Two tool sources, one agent:
-  - server.py (Day 1) — connected via MCP. Provides get_weather + read_file.
-  - wikipedia_summary  — a new @tool added directly. No server needed.
+Three acts. Same chat interface. More tools added each time.
 
-The agent decides which tool to call, chains results across steps, and keeps
-going until it has a complete answer. The context grows with each step — watch
-the token counts in the output.
+  ACT 1  LLM alone — answers from training data only
+  ACT 2  + server.py via MCP — real weather, real files
+  ACT 3  + Wikipedia — full agent, chains results across tools
+
+Type 'next' to advance to the next act.
+Type 'quit' to exit at any time.
 
 Run:
     python demo_agent.py
@@ -25,7 +26,7 @@ from smolagents import MCPClient, LiteLLMModel, ToolCallingAgent, tool
 
 # num_ctx=8192 is non-negotiable.
 # Agent loops accumulate tokens fast. Without this, Ollama silently truncates
-# the context and the agent loops forever or produces garbage.
+# the context and the agent loops forever or gives garbage.
 model = LiteLLMModel(
     model_id="ollama/qwen3:8b",
     api_base="http://localhost:11434",
@@ -54,34 +55,73 @@ def wikipedia_summary(topic: str) -> str:
         return f"Error: {e}"
 
 
-# MCPClient launches server.py as a subprocess in STDIO mode.
-# server.py detects it's not a tty and switches to STDIO automatically.
-# One terminal. No port conflicts.
-with MCPClient({"command": sys.executable, "args": [str(SERVER)]}) as mcp_tools:
-    agent = ToolCallingAgent(
-        tools=[*mcp_tools, wikipedia_summary],
-        model=model,
-    )
-
-    print("\nAgent ready.")
-    print(f"MCP tools loaded from server.py + wikipedia_summary")
-    print("Type 'quit' to exit.\n")
-
+def chat_loop(agent, header):
+    """Interactive chat. Returns True to advance, False to quit."""
+    print(header)
     while True:
-        q = input("You: ").strip()
-        if not q or q.lower() in ("quit", "exit"):
-            break
+        try:
+            q = input("You: ").strip()
+        except (EOFError, KeyboardInterrupt):
+            return False
+        if not q:
+            continue
+        if q.lower() == "next":
+            return True
+        if q.lower() == "quit":
+            return False
         print()
         result = agent.run(q)
         print(f"\nAgent: {result}\n")
 
 
-# ─── To expand this agent ─────────────────────────────────────────────────────
-#
-# Add more @tool functions above and include them in the tools list.
-#
-# To use your own Day 3 server instead of server.py:
-#   with MCPClient({"command": sys.executable, "args": ["your_server.py"]}) as mcp_tools:
-#
-# To connect to a running HTTP server:
-#   with MCPClient({"url": "http://127.0.0.1:8000/mcp/"}) as mcp_tools:
+# ── Act 1: LLM alone ──────────────────────────────────────────────────────────
+
+agent_bare = ToolCallingAgent(tools=[], model=model)
+
+if not chat_loop(
+    agent_bare,
+    "\n" + "─" * 60 +
+    "\n  ACT 1 — LLM alone (no tools)" +
+    "\n  Ask anything. Type 'next' to add the MCP server." +
+    "\n" + "─" * 60 + "\n",
+):
+    sys.exit(0)
+
+# ── Acts 2 + 3 share one MCPClient process ────────────────────────────────────
+# MCPClient launches server.py as a subprocess in STDIO mode.
+# server.py detects it's not a tty and switches to STDIO automatically.
+
+with MCPClient({"command": sys.executable, "args": [str(SERVER)]}) as mcp_tools:
+
+    # ── Act 2: + MCP server ───────────────────────────────────────────────────
+
+    agent_mcp = ToolCallingAgent(tools=[*mcp_tools], model=model)
+
+    if not chat_loop(
+        agent_mcp,
+        "\n" + "─" * 60 +
+        "\n  ACT 2 — MCP server added  (get_weather + read_file)" +
+        "\n  Ask anything. Type 'next' to add Wikipedia." +
+        "\n" + "─" * 60 + "\n",
+    ):
+        sys.exit(0)
+
+    # ── Act 3: + Wikipedia ────────────────────────────────────────────────────
+
+    agent_full = ToolCallingAgent(tools=[*mcp_tools, wikipedia_summary], model=model)
+
+    chat_loop(
+        agent_full,
+        "\n" + "─" * 60 +
+        "\n  ACT 3 — Wikipedia added  (full agent)" +
+        "\n  Ask anything. Type 'quit' to exit." +
+        "\n  Try: 'What is France known for, what's the weather in its capital," +
+        "\n        and what does notes.txt say?'" +
+        "\n" + "─" * 60 + "\n",
+    )
+
+
+# ─── To expand ────────────────────────────────────────────────────────────────
+# Add another @tool above and include it in agent_full's tools list.
+# To use your own Day 3 server instead:
+#   MCPClient({"command": sys.executable, "args": ["your_server.py"]})

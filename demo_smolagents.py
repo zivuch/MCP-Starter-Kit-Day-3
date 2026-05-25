@@ -30,7 +30,11 @@ model = LiteLLMModel(
 
 @tool
 def get_weather(city: str) -> str:
-    """Get the current weather conditions and temperature for any city in the world."""
+    """Get the current weather conditions and temperature for any city in the world.
+
+    Args:
+        city: The name of the city to get weather for, e.g. 'Tel Aviv' or 'Paris'.
+    """
     import requests
     try:
         r = requests.get(f"https://wttr.in/{city}?format=3", timeout=5)
@@ -42,7 +46,11 @@ def get_weather(city: str) -> str:
 
 @tool
 def read_file(filename: str) -> str:
-    """Read any text file from the Day 3 folder and return its full contents."""
+    """Read any text file from the Day 3 folder and return its full contents.
+
+    Args:
+        filename: The name of the file to read, e.g. 'notes.txt'.
+    """
     from pathlib import Path
     path = Path(__file__).parent / filename
     if not path.exists():
