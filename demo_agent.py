@@ -41,12 +41,11 @@ model = LiteLLMModel(
 # Goal: write a @tool that searches the web, then add it to the tools list below.
 #
 # Option A — DuckDuckGo (no API key needed):
-#   pip install duckduckgo-search
+#   pip install ddgs
 #
 #   @tool
 #
 # Option B — Tavily (free API key at tavily.com):
-#   pip install tavily-python
 #
 #   @tool
 
